@@ -31,7 +31,7 @@ export default function AppBar({ username, onLogout, persona, serverOnline, onMe
             <IconButton size="small" sx={{ p: 0.5 }}>
               <Menu size={18} strokeWidth={1.5} />
             </IconButton>
-            <Box component="img" src="/AccouPal.svg" sx={{ width: 28, height: 28, filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
+            <Box component="img" src={`${BASE_URL}AccouPal.svg`} sx={{ width: 28, height: 28, filter: 'brightness(0) invert(1)', opacity: 0.7 }} />
           </Box>
         )}
         {name && (

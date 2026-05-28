@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { Check, MoreHorizontal } from 'lucide-react';
+import { api } from '../api';
 
 export default function PersonaCard({ persona, active, onSelect }) {
   const [detailOpen, setDetailOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function PersonaCard({ persona, active, onSelect }) {
           }}
         />
         <Avatar
-          src={portrait || undefined}
+          src={portrait ? api(portrait) : undefined}
           sx={{
             width: 120,
             height: 120,

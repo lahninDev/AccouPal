@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { LogOut, Menu } from 'lucide-react';
 import ConnectionBadge from './ConnectionBadge';
+import { api } from '../api';
 
 export default function AppBar({ username, onLogout, persona, serverOnline, onMenuClick }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function AppBar({ username, onLogout, persona, serverOnline, onMe
         )}
         {name && (
           <>
-            <Avatar src={portrait} alt={name} sx={{ width: 28, height: 28, mr: 0.75 }} />
+            <Avatar src={portrait ? api(portrait) : undefined} alt={name} sx={{ width: 28, height: 28, mr: 0.75 }} />
             <Box sx={{ minWidth: 0, mr: 1 }}>
               <Typography variant="body2" fontWeight={600} noWrap>
                 {name}

@@ -162,6 +162,7 @@ export default function ChatPage() {
   }, [sessionId, msgs]);
 
   const fetchSessions = useCallback(async () => {
+    if (isGuest) return;
     try {
       const r = await fetch(api(`/api/sessions?userId=${userId}`));
       if (r.ok) {
@@ -178,10 +179,27 @@ export default function ChatPage() {
         );
       }
     } catch {}
-  }, [userId]);
+  }, [userId, isGuest]);
 
   useEffect(() => { fetchSessions(); }, [fetchSessions]);
   useEffect(() => { if (sessionId) fetchSessions(); }, [sessionId]);
+
+  useEffect(() => {
+    if (isGuest) {
+      if (sessionId) {
+        setSessions([{
+          id: sessionId,
+          title: 'Guest Chat',
+          personality,
+          message_count: msgs.length,
+          updated_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+        }]);
+      } else {
+        setSessions([]);
+      }
+    }
+  }, [isGuest, sessionId]);
 
   function newChat() {
     if (personalities.length > 0) {

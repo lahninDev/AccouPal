@@ -32,7 +32,7 @@ const RAIL_W = 52;
 const STORAGE_KEY = 'accoupal';
 const MAX_GUEST_MSGS = 15;
 
-function ChatBody({ msgs, isLoading, loadingSession, onNewChat, newMsgIds, onResend }) {
+function ChatBody({ msgs, isLoading, loadingSession, onNewChat, newMsgIds, onResend, memoryNote }) {
   const bottomRef = useRef(null);
   const theme = useTheme();
 
@@ -78,6 +78,13 @@ function ChatBody({ msgs, isLoading, loadingSession, onNewChat, newMsgIds, onRes
         '&::-webkit-scrollbar-thumb': { bgcolor: 'divider', borderRadius: 3 },
       }}
     >
+      {memoryNote && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
+          <Box sx={{ px: 1.5, py: 0.5, borderRadius: 2, bgcolor: 'rgba(88,166,255,0.1)', border: '1px solid rgba(88,166,255,0.2)', fontSize: '0.7rem', color: '#58a6ff', fontWeight: 500 }}>
+            📖 {memoryNote}
+          </Box>
+        </Box>
+      )}
       {msgs.map((msg) => (
         <MessageBubble key={msg.id} msg={msg} animate={newMsgIds.current.has(msg.id)} onResend={onResend} />
       ))}
@@ -121,6 +128,7 @@ export default function ChatPage() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [reminderDismissed, setReminderDismissed] = useState(false);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [memoryNote, setMemoryNote] = useState(null);
   const [signupOpen, setSignupOpen] = useState(false);
   const [signupName, setSignupName] = useState('');
   const [signupPw, setSignupPw] = useState('');
@@ -261,6 +269,7 @@ export default function ChatPage() {
         setSessionId(data.sessionId);
         navigate(`/chat/${data.sessionId}`, { replace: true });
       }
+      setMemoryNote(data._memory || null);
       const botMsg = { id: Date.now() + 1, role: 'bot', text: data.reply, time: new Date() };
       newMsgIds.current.add(botMsg.id);
       setMsgs((prev) => [...prev, botMsg]);
@@ -427,7 +436,7 @@ export default function ChatPage() {
                 </IconButton>
               </Box>
             )}
-            <ChatBody msgs={msgs} isLoading={isLoading} loadingSession={loadingSession} onNewChat={newChat} newMsgIds={newMsgIds} onResend={handleSend} />
+            <ChatBody msgs={msgs} isLoading={isLoading} loadingSession={loadingSession} onNewChat={newChat} newMsgIds={newMsgIds} onResend={handleSend} memoryNote={memoryNote} />
             <Box sx={{ position: 'sticky', bottom: 0, zIndex: 10, boxShadow: '0 -4px 12px rgba(0,0,0,0.3)' }}>
               {personality && <ChatInput onSend={handleSend} isLoading={isLoading} />}
             </Box>

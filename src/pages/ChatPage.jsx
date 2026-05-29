@@ -250,7 +250,8 @@ export default function ChatPage() {
     setMsgs((prev) => [...prev, userMsg]);
     setIsLoading(true);
     try {
-      const r = await fetch(api('/api/chat'), {
+      const isMemoryPersona = personality === "Mukapoleon";
+      const r = await fetch(api(isMemoryPersona ? '/api/hermes/chat' : '/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, sessionId, userId, personality }),

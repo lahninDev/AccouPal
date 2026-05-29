@@ -249,13 +249,22 @@ export default function ChatPage() {
     newMsgIds.current.add(userMsg.id);
     setMsgs((prev) => [...prev, userMsg]);
     setIsLoading(true);
-    try {
-      const isMemoryPersona = personality === "Mukapoleon";
-      const r = await fetch(api(isMemoryPersona ? '/api/hermes/chat' : '/api/chat'), {
+
+    async function trySend(endpoint) {
+      const r = await fetch(api(endpoint), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, sessionId, userId, personality }),
       });
+      return r;
+    }
+
+    try {
+      const isMemoryPersona = personality === "Mukapoleon";
+      let r = await trySend(isMemoryPersona ? '/api/hermes/chat' : '/api/chat');
+      if (!r.ok && isMemoryPersona && (r.status === 502 || r.status === 500)) {
+        r = await trySend('/api/chat');
+      }
       if (!r.ok) {
         const body = await r.json().catch(() => ({}));
         if (body.error === 'guest_limit') {

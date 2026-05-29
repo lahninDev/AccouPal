@@ -260,7 +260,7 @@ export default function ChatPage() {
     }
 
     try {
-      const isMemoryPersona = personality === "Mukapoleon";
+      const isMemoryPersona = personality === "Mukapoleon_II";
       let r = await trySend(isMemoryPersona ? '/api/hermes/chat' : '/api/chat');
       if (!r.ok && isMemoryPersona && (r.status === 502 || r.status === 500)) {
         r = await trySend('/api/chat');
